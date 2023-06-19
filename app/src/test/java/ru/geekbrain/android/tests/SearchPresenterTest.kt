@@ -1,8 +1,13 @@
 package ru.geekbrain.android.tests
 
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ActivityScenario
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.inOrder
@@ -13,9 +18,12 @@ import ru.geekbrain.android.tests.model.SearchResponse
 import ru.geekbrain.android.tests.model.SearchResult
 import ru.geekbrain.android.tests.presenter.search.SearchPresenter
 import ru.geekbrain.android.tests.repository.GitHubRepository
+import ru.geekbrain.android.tests.view.details.DetailsActivity
+import ru.geekbrain.android.tests.view.search.MainActivity
 import ru.geekbrain.android.tests.view.search.ViewSearchContract
 
 class SearchPresenterTest {
+
 
     private lateinit var presenter: SearchPresenter
 
@@ -29,8 +37,10 @@ class SearchPresenterTest {
     fun setUp() {
         //initMocks(this)
         initMocks(this)
-        presenter = SearchPresenter(viewContract, repository)
+        presenter = SearchPresenter(repository)
+        presenter.onAttach(viewContract)
     }
+
 
 
     @Test

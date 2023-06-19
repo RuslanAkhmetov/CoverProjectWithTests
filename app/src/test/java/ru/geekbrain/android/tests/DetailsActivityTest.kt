@@ -32,13 +32,15 @@ class DetailsActivityTest {
     fun setUp() {
         scenario = ActivityScenario.launch(DetailsActivity::class.java)
         context = ApplicationProvider.getApplicationContext()
-
     }
 
     @After
     fun close() {
         scenario.close()
+
     }
+
+
 
     @Test
     fun activity_AssertNotNull() {
@@ -61,7 +63,7 @@ class DetailsActivityTest {
     }
 
     @Test
-    fun activityTextView_HasTest(){
+    fun activityTextView_HasText(){
         scenario.onActivity {
             val totalCountTextView = it.findViewById<TextView>(R.id.totalCountTextView)
             assertEquals("Number of results: 0", totalCountTextView.text)
@@ -111,13 +113,14 @@ class DetailsActivityTest {
 
     @Test
     fun activityCreateIntent_NotNull() {
-        val context: Context = ApplicationProvider.getApplicationContext()
+
         val intent = DetailsActivity.getIntent(context, 0)
         assertNotNull(intent)
     }
 
     @Test
     fun activityCreateIntent_HasExtras() {
+
         val intent = DetailsActivity.getIntent(context, 0)
         val bundle = intent.extras
         assertNotNull(bundle)
@@ -125,9 +128,12 @@ class DetailsActivityTest {
     @Test
     fun activityCreateIntent_HasCount() {
         val count = 42
+
         val intent = DetailsActivity.getIntent(context, count)
         val bundle = intent.extras
         assertEquals(count, bundle?.getInt(DetailsActivity.TOTAL_COUNT_EXTRA, 0))
+
+
     }
 
 

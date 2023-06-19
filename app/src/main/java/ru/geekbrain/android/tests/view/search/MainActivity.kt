@@ -22,15 +22,22 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
     private var totalCount = 0
 
     private val adapter = SearchResultAdapter()
-    private val presenter: PresenterSearchContract = SearchPresenter(this, createRepository())
+
+    private val presenter: PresenterSearchContract = SearchPresenter(createRepository())
 
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        presenter.onAttach(this)
         setContentView(binding.root)
         setUI()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDetach()
     }
 
     private fun setUI() {

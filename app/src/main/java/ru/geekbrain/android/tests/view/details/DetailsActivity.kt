@@ -23,13 +23,19 @@ class DetailsActivity : AppCompatActivity(), ViewDetailsContract {
 
     lateinit var binding: ActivityDetailsBinding
 
-    private val presenterDetailsContract = DetailsPresenter(this)
+    private val presenterDetailsContract = DetailsPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
+        presenterDetailsContract.onAttach(this)
         setContentView(binding.root)
         setUi()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenterDetailsContract.onDetach()
     }
 
     private fun setUi() {
