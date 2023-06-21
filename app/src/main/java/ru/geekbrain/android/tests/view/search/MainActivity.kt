@@ -88,8 +88,14 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         searchResults: List<SearchResult>,
         totalCount: Int
     ) {
-        adapter.updateResults(searchResults)
+        with(binding.totalCountTextView){
+            visibility = View.VISIBLE
+            //text = String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
+            text = "Number of results: $totalCount"
+        }
+
         this.totalCount = totalCount
+        adapter.updateResults(searchResults)
     }
 
     override fun displayError() {
@@ -107,6 +113,9 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
             binding.progressBar.visibility = View.GONE
         }
     }
+
+
+
 
     companion object {
         const val BASE_URL = "https://api.github.com"
