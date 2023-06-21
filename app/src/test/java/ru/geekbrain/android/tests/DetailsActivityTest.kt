@@ -9,8 +9,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
-import ru.geekbrain.android.tests.view.details.DetailsActivity
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import org.junit.After
@@ -18,6 +16,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import ru.geekbrain.android.tests.view.details.DetailsActivity
 
 
 @RunWith(AndroidJUnit4::class)
@@ -28,6 +27,7 @@ class DetailsActivityTest {
 
     lateinit var context:Context
 
+
     @Before
     fun setUp() {
         scenario = ActivityScenario.launch(DetailsActivity::class.java)
@@ -37,7 +37,6 @@ class DetailsActivityTest {
     @After
     fun close() {
         scenario.close()
-
     }
 
 
@@ -135,6 +134,8 @@ class DetailsActivityTest {
 
 
     }
+
+
 
 
 
