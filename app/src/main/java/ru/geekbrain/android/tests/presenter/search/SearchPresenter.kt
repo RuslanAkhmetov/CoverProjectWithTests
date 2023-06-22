@@ -1,19 +1,19 @@
 package ru.geekbrain.android.tests.presenter.search
 
+import android.util.Log
 import retrofit2.Response
 import ru.geekbrain.android.tests.model.SearchResponse
-import ru.geekbrain.android.tests.repository.GitHubRepository
+import ru.geekbrain.android.tests.repository.RepositoryCallback
+import ru.geekbrain.android.tests.repository.RepositoryContract
 import ru.geekbrain.android.tests.view.ViewContract
 import ru.geekbrain.android.tests.view.search.ViewSearchContract
 
 internal class SearchPresenter internal constructor(
 
-    private val repository: GitHubRepository
-) : PresenterSearchContract, GitHubRepository.GitHubRepositoryCallback {
+    private val repository: RepositoryContract
+) : PresenterSearchContract, RepositoryCallback {
 
     private var viewContract: ViewSearchContract? = null
-
-    fun getView() = viewContract
 
     override fun searchGitHub(searchQuery: String) {
         viewContract?.displayLoading(true)
@@ -35,6 +35,7 @@ internal class SearchPresenter internal constructor(
             val searchResponse = response.body()
             val searchResults = searchResponse?.searchResults
             val totalCounts = searchResponse?.totalCount
+            Log.i("TAG", "handleGitHubResponse: $totalCounts")
             if (!searchResults.isNullOrEmpty() && totalCounts != null) {
                 viewContract?.displaySearchResults(
                     searchResults,
