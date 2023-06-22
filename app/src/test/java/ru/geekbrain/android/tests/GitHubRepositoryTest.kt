@@ -15,8 +15,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.geekbrain.android.tests.model.SearchResponse
-import ru.geekbrain.android.tests.repository.GitHubApi
-import ru.geekbrain.android.tests.repository.GitHubRepository
+import ru.geekbrain.android.tests.repository.RepositoryCallback
+import ru.geekbrain.android.tests.repository.real.GitHubApi
+import ru.geekbrain.android.tests.repository.real.GitHubRepository
 
 class GitHubRepositoryTest {
 
@@ -27,7 +28,7 @@ class GitHubRepositoryTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        MockitoAnnotations.openMocks(this)
         repository = GitHubRepository(gitHubApi)
     }
 
@@ -40,7 +41,7 @@ class GitHubRepositoryTest {
 
         repository.searchGithub(
             searchQuery,
-            mock(GitHubRepository.GitHubRepositoryCallback::class.java)
+            mock(RepositoryCallback::class.java)
         )
 
         verify(gitHubApi, times(1))
@@ -53,7 +54,7 @@ class GitHubRepositoryTest {
         val searchQuery = "some Query"
         val response = mock(Response::class.java) as Response<SearchResponse?>
         val gitHubRepositoryCallback =
-            mock(GitHubRepository.GitHubRepositoryCallback::class.java)
+            mock(RepositoryCallback::class.java)
 
         val call = object : Call<SearchResponse?> {
             override fun clone(): Call<SearchResponse?> {
@@ -108,25 +109,24 @@ class GitHubRepositoryTest {
 
         val callbackMocked = mock(Callback::class.java) as Callback<SearchResponse?>
 
-        val gitHubRepositoryCallbackMocked =
-            mock(GitHubRepository.GitHubRepositoryCallback::class.java)
+        val gitHubRepositoryCallbackMocked =  mock(RepositoryCallback::class.java)
+
         val responseMocked = mock(Response::class.java) as Response<SearchResponse?>
 
-        `when`(gitHubApi.searchGithub(searchQuery))
-            .thenReturn(callMocked)
+        `when`(gitHubApi.searchGithub(searchQuery)).thenReturn(callMocked)
 
-        `when`(callMocked.enqueue(callbackMocked)).then {
-            callbackMocked.onResponse(any(), any())
+        `when`(callMocked.enqueue(any())).then {
+            callbackMocked.onResponse(callMocked, responseMocked)
         }
 
-        `when`(callbackMocked.onResponse(any(), any())).then {
+        `when`(callbackMocked.onResponse(callMocked, responseMocked)).then {
             gitHubRepositoryCallbackMocked.handleGitHubResponse(responseMocked)
         }
 
         repository.searchGithub(searchQuery, gitHubRepositoryCallbackMocked)
 
-        verify(gitHubRepositoryCallbackMocked, times(1))
-            .handleGitHubResponse(responseMocked)
+        verify(gitHubRepositoryCallbackMocked, times(1)).
+            handleGitHubResponse(responseMocked)
 
     }
 

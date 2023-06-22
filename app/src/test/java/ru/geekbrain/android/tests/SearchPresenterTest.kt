@@ -7,12 +7,12 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.inOrder
 import org.mockito.Mockito.times
-import org.mockito.MockitoAnnotations.initMocks
+import org.mockito.MockitoAnnotations.openMocks
 import retrofit2.Response
 import ru.geekbrain.android.tests.model.SearchResponse
 import ru.geekbrain.android.tests.model.SearchResult
 import ru.geekbrain.android.tests.presenter.search.SearchPresenter
-import ru.geekbrain.android.tests.repository.GitHubRepository
+import ru.geekbrain.android.tests.repository.real.GitHubRepository
 import ru.geekbrain.android.tests.view.search.ViewSearchContract
 
 class SearchPresenterTest {
@@ -28,7 +28,7 @@ class SearchPresenterTest {
 
     @Before
     fun setUp() {
-        initMocks(this)
+        openMocks(this)
         presenter = SearchPresenter(repository)
         presenter.onAttach(viewContract)
     }

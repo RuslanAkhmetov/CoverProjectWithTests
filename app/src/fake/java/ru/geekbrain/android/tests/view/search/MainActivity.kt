@@ -6,16 +6,18 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
+import org.koin.android.ext.android.inject
 import ru.geekbrain.android.tests.R
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
 import ru.geekbrain.android.tests.databinding.ActivityMainBinding
 import ru.geekbrain.android.tests.model.SearchResult
 import ru.geekbrain.android.tests.presenter.search.PresenterSearchContract
 import ru.geekbrain.android.tests.presenter.search.SearchPresenter
-import ru.geekbrain.android.tests.repository.*
+import ru.geekbrain.android.tests.repository.RepositoryContract
+import ru.geekbrain.android.tests.repository.fake.FakeGitHubRepository
 import ru.geekbrain.android.tests.view.SearchResultAdapter
 import ru.geekbrain.android.tests.view.details.DetailsActivity
+import java.util.*
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
@@ -23,7 +25,8 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     private val adapter = SearchResultAdapter()
 
-    private val presenter: PresenterSearchContract = SearchPresenter(createRepository())
+    private val repository: RepositoryContract by inject()
+    private val presenter: PresenterSearchContract = SearchPresenter(repository)
 
     lateinit var binding: ActivityMainBinding
 
@@ -73,28 +76,17 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         })
     }
 
-    private fun createRepository(): GitHubRepository {
-        return GitHubRepository(createRetrofit().create(GitHubApi::class.java))
-    }
-
-    private fun createRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
     override fun displaySearchResults(
         searchResults: List<SearchResult>,
         totalCount: Int
     ) {
-        with(binding.totalCountTextView){
+        this.totalCount = totalCount
+
+        with(binding.totalTextView){
             visibility = View.VISIBLE
-            //text = String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
-            text = "Number of results: $totalCount"
+            text = String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
         }
 
-        this.totalCount = totalCount
         adapter.updateResults(searchResults)
     }
 
@@ -112,13 +104,6 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         } else {
             binding.progressBar.visibility = View.GONE
         }
-    }
-
-
-
-
-    companion object {
-        const val BASE_URL = "https://api.github.com"
     }
 
 }

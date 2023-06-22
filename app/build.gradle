@@ -31,8 +31,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    testOptions{
-        unitTests{
+    testOptions {
+        unitTests {
             includeAndroidResources = true
         }
     }
@@ -44,16 +44,21 @@ android {
         viewBinding = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.3.2'
-    }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+    flavorDimensions "default"
+    productFlavors {
+        fake {
+            applicationIdSuffix ".fake"
+            versionNameSuffix "-fake"
+            buildConfigField "String", "BTYPE", '"FAKE"'
+        }
+        real {
+            applicationIdSuffix ".real"
+            versionNameSuffix "-real"
+            buildConfigField "String", "BTYPE", '"REAL"'
         }
     }
-}
 
+}
 
 
 dependencies {
@@ -66,6 +71,17 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    //Koin
+    //Текущая версия библиотеки
+    def koin_version = "3.1.2"
+    //Основная библиотека
+    implementation "io.insert-koin:koin-core:$koin_version"
+    //Koin для поддержки Android (Scope,ViewModel ...)
+    implementation "io.insert-koin:koin-android:$koin_version"
+    //Для совместимости с Java
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
+
+
     //androidTestImplementation 'androidx.test.ext.junit:runner:1.1.5'
 
     //Robolectric
