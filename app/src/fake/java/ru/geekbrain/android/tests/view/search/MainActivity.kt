@@ -1,20 +1,18 @@
 package ru.geekbrain.android.tests.view.search
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import org.koin.android.ext.android.inject
 import ru.geekbrain.android.tests.R
-
 import ru.geekbrain.android.tests.databinding.ActivityMainBinding
 import ru.geekbrain.android.tests.model.SearchResult
 import ru.geekbrain.android.tests.presenter.search.PresenterSearchContract
 import ru.geekbrain.android.tests.presenter.search.SearchPresenter
 import ru.geekbrain.android.tests.repository.RepositoryContract
-import ru.geekbrain.android.tests.repository.fake.FakeGitHubRepository
 import ru.geekbrain.android.tests.view.SearchResultAdapter
 import ru.geekbrain.android.tests.view.details.DetailsActivity
 import java.util.*
@@ -57,6 +55,19 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
     }
 
     private fun setQueryListener() {
+        binding.searchButton.setOnClickListener{
+            val query = binding.searchEditText.text.toString()
+            if (query.isNotBlank()) {
+                presenter.searchGitHub(query)
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.enter_search_word),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
         binding.searchEditText.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = binding.searchEditText.text.toString()
