@@ -29,11 +29,23 @@
 
     <Button
         android:id="@+id/toDetailsActivityButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/searchButton"
         app:layout_constraintTop_toBottomOf="@id/searchEditText"
-        tools:text="@string/to_details" />
+        android:text="@string/to_details" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/toDetailsActivityButton"
+        app:layout_constraintTop_toBottomOf="@id/searchEditText"
+        android:text="@string/search" />
 
     <TextView
         android:id="@+id/totalTextView"
